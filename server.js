@@ -184,6 +184,10 @@ async function handle(request, response) {
     return servePage(response, isAuthenticated(request) ? 'dashboard.html' : 'login.html');
   }
 
+  if (request.method === 'GET' && pathname === '/login') {
+    return servePage(response, isAuthenticated(request) ? 'dashboard.html' : 'login.html');
+  }
+
   if (request.method === 'GET' && pathname === '/styles.css') {
     return serveAsset(response, 'styles.css', 'text/css; charset=utf-8');
   }
