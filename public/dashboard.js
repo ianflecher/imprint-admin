@@ -52,10 +52,48 @@ function renderDataCard(service) {
     `;
   }
 
+  if (service.key === 'production') {
+    const data = service.data;
+    return renderMetricDataCard(service, [
+      [data.orders?.total ?? 0, 'orders'],
+      [data.orders?.active ?? 0, 'active orders'],
+      [data.orders?.completed ?? 0, 'completed orders'],
+      [data.inquiries ?? 0, 'inquiries'],
+      [data.tasksForChecking ?? 0, 'approvals'],
+      [data.pendingPayments ?? 0, 'pending payments'],
+      [data.pendingMaterialRequests ?? 0, 'material requests'],
+      [data.inventoryItems ?? 0, 'inventory items'],
+    ]);
+  }
+
+  if (service.key === 'marketing') {
+    const data = service.data;
+    return renderMetricDataCard(service, [
+      [data.events?.total ?? 0, 'events'],
+      [data.events?.upcoming ?? 0, 'upcoming events'],
+      [data.activeEndorsers ?? 0, 'active endorsers'],
+      [data.newInquiries ?? 0, 'new inquiries'],
+      [data.pendingObligations ?? 0, 'pending obligations'],
+      [data.openTasks ?? 0, 'open tasks'],
+    ]);
+  }
+
   return `
     <article class="data-card accent-${service.accent}">
       <div class="data-card-head"><span class="service-icon">${service.icon}</span><strong>${service.name}</strong><span class="status status-online"><span class="status-dot"></span>live</span></div>
       <pre class="data-json">${JSON.stringify(service.data, null, 2)}</pre>
+      <a class="text-link" href="${service.url}" target="_blank" rel="noreferrer">Open ${service.name}</a>
+    </article>
+  `;
+}
+
+function renderMetricDataCard(service, metrics) {
+  return `
+    <article class="data-card accent-${service.accent}">
+      <div class="data-card-head"><span class="service-icon">${service.icon}</span><strong>${service.name}</strong><span class="status status-online"><span class="status-dot"></span>live</span></div>
+      <div class="metric-grid">
+        ${metrics.map(([value, label]) => `<div><strong>${value}</strong><span>${label}</span></div>`).join('')}
+      </div>
       <a class="text-link" href="${service.url}" target="_blank" rel="noreferrer">Open ${service.name}</a>
     </article>
   `;
