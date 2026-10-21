@@ -62,6 +62,42 @@ The HRIS repository's `deploy/kubernetes/start-local.ps1` builds this same
 image and applies the complete four-application stack automatically when this
 repository is cloned beside HRIS, Production, and Marketing.
 
+You can also start the complete stack from this repository. Clone the four
+repositories beside one another:
+
+```text
+D:\GitHub\hris
+D:\GitHub\production
+D:\GitHub\marketing
+D:\GitHub\imprint-admin
+```
+
+Then run PowerShell from the Central Admin repository:
+
+```powershell
+.\setup-local.ps1
+```
+
+For a disposable test cluster with default accounts and demo records, run:
+
+```powershell
+.\setup-local.ps1 -SeedDefaultAccounts -SeedDemoData
+```
+
+The normal command preserves existing Kubernetes database volumes. The demo
+option resets the Production business tables before loading demo orders and
+runs the Marketing demo seeder. Live database records are not stored in GitHub;
+restore a database backup when moving real data to another computer.
+
+If the repositories are in different folders, pass their paths explicitly:
+
+```powershell
+.\setup-local.ps1 `
+  -HrisPath 'D:\Projects\hris' `
+  -ProductionPath 'D:\Projects\production\application' `
+  -MarketingPath 'D:\Projects\marketing\temp_app'
+```
+
 ## Configuration
 
 The image has no third-party runtime dependencies. Set these environment
