@@ -18,14 +18,32 @@
       <div>
         <p class="eyebrow">CENTRAL ADMIN</p>
         <h1>System control center</h1>
-        <p class="lede">Monitor the three applications and open the one you need.</p>
+        <p class="lede">See live business data, monitor the three applications, and open the one you need.</p>
       </div>
       <div class="summary" aria-live="polite">
         <strong id="online-count">Checking...</strong>
         <span id="checked-at">Connecting to services</span>
       </div>
     </section>
+    <section class="data-section" aria-labelledby="data-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">LIVE DATA</p>
+          <h2 id="data-heading">Business snapshot</h2>
+        </div>
+        <span class="muted">Counts come directly from the connected applications.</span>
+      </div>
+      <div id="data-grid" class="data-grid" aria-live="polite"></div>
+    </section>
+    <section class="services-section" aria-labelledby="services-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SYSTEMS</p>
+          <h2 id="services-heading">Application status</h2>
+        </div>
+      </div>
     <section id="service-grid" class="service-grid" aria-live="polite"></section>
+    </section>
     <p id="load-error" class="notice" hidden>Unable to load service status. The admin page is still available; try again in a moment.</p>
   </main>
   <script src="/dashboard.js"></script>

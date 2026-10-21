@@ -25,6 +25,23 @@ h1, h2, p { margin-top: 0; }
 h1 { margin-bottom: 8px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -.02em; }
 h2 { margin-bottom: 8px; font-size: 1.35rem; }
 .lede { max-width: 660px; margin-bottom: 0; color: var(--muted); font-size: 1.05rem; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
+.section-heading h2 { margin-bottom: 0; }
+.data-section, .services-section { margin-top: 34px; }
+.data-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.data-card { min-height: 230px; border: 1px solid var(--line); border-top: 4px solid var(--blue); border-radius: 8px; background: var(--white); padding: 20px; box-shadow: 0 8px 24px rgb(16 32 51 / 5%); }
+.data-card-muted { min-height: 180px; }
+.data-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.data-card-head strong { font-size: 1.1rem; margin-right: auto; }
+.metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 8px; margin-bottom: 20px; }
+.metric-grid div { min-width: 0; }
+.metric-grid strong, .metric-grid span { display: block; }
+.metric-grid strong { font-size: 1.35rem; line-height: 1.1; }
+.metric-grid span { color: var(--muted); font-size: .72rem; }
+.data-empty { min-height: 58px; color: var(--muted); }
+.text-link { color: var(--blue); font-weight: 750; text-decoration: none; }
+.text-link:hover { text-decoration: underline; }
+.data-json { min-height: 88px; max-height: 120px; overflow: auto; margin: 0 0 16px; padding: 10px; border-radius: 6px; background: #f5f7fa; color: var(--muted); font-size: .75rem; }
 .summary { min-width: 190px; padding: 16px 18px; border: 1px solid var(--line); background: var(--white); border-radius: 8px; }
 .summary strong, .summary span { display: block; }
 .summary strong { font-size: 1.1rem; }
@@ -66,5 +83,8 @@ h2 { margin-bottom: 8px; font-size: 1.35rem; }
   .page-heading { display: block; }
   .summary { margin-top: 22px; }
   .service-grid { grid-template-columns: 1fr; }
+  .data-grid { grid-template-columns: 1fr; }
+  .section-heading { display: block; }
+  .section-heading > .muted { display: block; margin-top: 6px; }
   .topbar-inner, .page-shell { width: min(100% - 28px, 1180px); }
 }

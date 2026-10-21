@@ -15,6 +15,7 @@ const services = [
     description: 'People, attendance, leave, overtime, and payroll',
     url: process.env.CENTRAL_ADMIN_HRIS_URL || 'http://127.0.0.1:30080',
     healthUrl: process.env.CENTRAL_ADMIN_HRIS_HEALTH_URL || 'http://hris:10000',
+    summaryUrl: process.env.CENTRAL_ADMIN_HRIS_SUMMARY_URL || 'http://hris:10000/internal/central-admin/summary',
     icon: 'HR',
     accent: 'red',
   },
@@ -24,6 +25,7 @@ const services = [
     description: 'Orders, production work, and shop operations',
     url: process.env.CENTRAL_ADMIN_PRODUCTION_URL || 'http://127.0.0.1:30081',
     healthUrl: process.env.CENTRAL_ADMIN_PRODUCTION_HEALTH_URL || 'http://production:10000',
+    summaryUrl: process.env.CENTRAL_ADMIN_PRODUCTION_SUMMARY_URL || 'http://production:10000/internal/central-admin/summary',
     icon: 'PR',
     accent: 'blue',
   },
@@ -33,6 +35,7 @@ const services = [
     description: 'Campaigns, customers, and marketing work',
     url: process.env.CENTRAL_ADMIN_MARKETING_URL || 'http://127.0.0.1:30082',
     healthUrl: process.env.CENTRAL_ADMIN_MARKETING_HEALTH_URL || 'http://marketing:10000',
+    summaryUrl: process.env.CENTRAL_ADMIN_MARKETING_SUMMARY_URL || 'http://marketing:10000/internal/central-admin/summary',
     icon: 'MK',
     accent: 'gold',
   },
@@ -136,6 +139,27 @@ async function checkService(service) {
   }
 }
 
+async function loadSummary(service) {
+  if (!service.summaryUrl) return null;
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3000);
+
+  try {
+    const result = await fetch(service.summaryUrl, {
+      signal: controller.signal,
+      headers: { 'X-Central-Admin-Token': process.env.CENTRAL_ADMIN_INTERNAL_TOKEN || '' },
+    });
+
+    if (!result.ok) return null;
+    return await result.json();
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function handle(request, response) {
   const requestUrl = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
   const pathname = requestUrl.pathname;
@@ -171,7 +195,10 @@ async function handle(request, response) {
 
   if (request.method === 'GET' && pathname === '/api/status') {
     if (!isAuthenticated(request)) return send(response, 401, JSON.stringify({ error: 'Unauthenticated' }), { 'Content-Type': 'application/json' });
-    const checked = await Promise.all(services.map(checkService));
+    const checked = await Promise.all(services.map(async (service) => ({
+      ...(await checkService(service)),
+      data: await loadSummary(service),
+    })));
     return send(response, 200, JSON.stringify({
       checkedAt: new Date().toISOString(),
       online: checked.filter((service) => service.status === 'online').length,
